@@ -44,8 +44,7 @@ namespace BitSpectre
                 {
                     for (int i = 0; i < checkedListBox1.Items.Count; ++i)
                     {
-                        bool flag = GetBinaryFlag(spectreVal, i);
-                        if (flag)
+                        if (GetBinaryFlag(spectreVal, i))
                             checkedListBox1.SetItemCheckState(i + 1, CheckState.Checked); //the first item in the checkedlistbox is 0 and not a valid bit
                     }
                 }
