@@ -17,21 +17,18 @@ namespace BitSpectre
             InitializeComponent();
         }
 
-        /// <summary>
-        /// We use OnActivated so that modifications made outside of this app can be reflected
-        /// </summary>
-        protected override void OnActivated(EventArgs e)
+        private void frmSpectre_Load(object sender, EventArgs e)
         {
             RegistryKey rkSp = Registry.LocalMachine.OpenSubKey(subkey, RegistryKeyPermissionCheck.ReadSubTree);
             //if (rkSp != null) /* this won't be null on any current version of Windows */
             //{
-                object objSp = rkSp.GetValue("FeatureSettingsOverride", null);
-                if (objSp != null)
-                {
-                    regValExists = true;
-                    spectreVal = (int)objSp;
-                }
-                rkSp.Close();
+            object objSp = rkSp.GetValue("FeatureSettingsOverride", null);
+            if (objSp != null)
+            {
+                regValExists = true;
+                spectreVal = (int)objSp;
+            }
+            rkSp.Close();
             //}
 
             labelDecimalValue.Text = "Decimal value: " + spectreVal.ToString();

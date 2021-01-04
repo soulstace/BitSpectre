@@ -154,6 +154,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Speculative execution side-channel vulnerability mitigations - Bit Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSpectre_FormClosing);
+            this.Load += new System.EventHandler(this.frmSpectre_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
