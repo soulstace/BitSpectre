@@ -48,7 +48,7 @@ namespace BitSpectre
             }
         }
 
-        public static int SetBinaryFlag(int value, int index, bool check)
+        int SetBinaryFlag(int value, int index, bool check)
         {
             if (check)
             {
@@ -57,7 +57,7 @@ namespace BitSpectre
             return value & ~(1 << index);
         }
 
-        public static bool GetBinaryFlag(int value, int index)
+        bool GetBinaryFlag(int value, int index)
         {
             return (value & (1 << index)) != 0;
         }
@@ -126,7 +126,7 @@ namespace BitSpectre
             checkedListBox1.Enabled = checkBoxUnderstood.Checked;
         }
 
-        private void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://github.com/soulstace/BitSpectre");
         }
