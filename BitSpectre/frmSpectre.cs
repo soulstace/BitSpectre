@@ -10,7 +10,9 @@ namespace BitSpectre
         int spectreVal = 0;
         bool regValExists = false;
         bool userModified = false;
+        bool userSetHyperV = false;
         const string subkey = @"SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";
+        const string hyperval = "MinVmVersionForCpuBasedMitigations";
 
         public frmSpectre()
         {
@@ -49,7 +51,7 @@ namespace BitSpectre
 
             RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
                 RegistryKeyPermissionCheck.ReadSubTree);
-            checkBoxHyperV.Checked = rkHv.GetValue("MinVmVersionForCpuBasedMitigations", "").ToString() == "1.0" ? true : false;
+            checkBoxHyperV.Checked = rkHv.GetValue(hyperval, "").ToString() == "1.0" ? true : false;
             rkHv.Close();
         }
 
@@ -102,6 +104,17 @@ namespace BitSpectre
                 rkSp.SetValue("FeatureSettingsOverrideMask", 3);
                 rkSp.Close();
 
+                if (userSetHyperV)
+                {
+                    RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
+                            RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    if (checkBoxHyperV.Checked)
+                        rkHv.SetValue(hyperval, "1.0", RegistryValueKind.String);
+                    else
+                        rkHv.DeleteValue(hyperval, false);
+                    rkHv.Close();
+                }
+
                 //Prompt to restart
                 if (DialogResult.Yes == MessageBox.Show("Your settings will not take effect until you reboot the system.\nWould you like to restart Windows now?", "Restart required", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1))
                 {
@@ -142,14 +155,7 @@ namespace BitSpectre
             if (checkBoxUnderstood.Checked)
             {
                 userModified = true;
-                string val = "MinVmVersionForCpuBasedMitigations";
-                RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
-                        RegistryKeyPermissionCheck.ReadWriteSubTree);
-                if (checkBoxHyperV.Checked)
-                    rkHv.SetValue(val, "1.0", RegistryValueKind.String);
-                else
-                    rkHv.DeleteValue(val, false);
-                rkHv.Close(); 
+                userSetHyperV = true;
             }
         }
     }
