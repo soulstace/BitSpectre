@@ -51,8 +51,11 @@ namespace BitSpectre
 
             RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
                 RegistryKeyPermissionCheck.ReadSubTree);
-            checkBoxHyperV.Checked = rkHv.GetValue(hyperval, "").ToString() == "1.0" ? true : false;
-            rkHv.Close();
+            if (rkHv != null)
+            {
+                checkBoxHyperV.Checked = rkHv.GetValue(hyperval, "").ToString() == "1.0" ? true : false;
+                rkHv.Close();
+            }
         }
 
         int SetBinaryFlag(int value, int index, bool check)
