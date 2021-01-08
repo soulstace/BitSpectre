@@ -142,10 +142,13 @@ namespace BitSpectre
             if (checkBoxUnderstood.Checked)
             {
                 userModified = true;
-                string data = checkBoxHyperV.Checked ? "1.0" : "99.9";
+                string val = "MinVmVersionForCpuBasedMitigations";
                 RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
-                    RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rkHv.SetValue("MinVmVersionForCpuBasedMitigations", data, RegistryValueKind.String);
+                        RegistryKeyPermissionCheck.ReadWriteSubTree);
+                if (checkBoxHyperV.Checked)
+                    rkHv.SetValue(val, "1.0", RegistryValueKind.String);
+                else
+                    rkHv.DeleteValue(val, false);
                 rkHv.Close(); 
             }
         }
