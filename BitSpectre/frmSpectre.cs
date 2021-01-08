@@ -46,6 +46,11 @@ namespace BitSpectre
                     }
                 }
             }
+
+            RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
+                RegistryKeyPermissionCheck.ReadSubTree);
+            checkBoxHyperV.Checked = rkHv.GetValue("MinVmVersionForCpuBasedMitigations", "").ToString() == "1.0" ? true : false;
+            rkHv.Close();
         }
 
         int SetBinaryFlag(int value, int index, bool check)
@@ -124,11 +129,25 @@ namespace BitSpectre
         void checkBoxUnderstood_CheckedChanged(object sender, EventArgs e)
         {
             checkedListBox1.Enabled = checkBoxUnderstood.Checked;
+            checkBoxHyperV.Enabled = checkBoxUnderstood.Checked;
         }
 
         void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://github.com/soulstace/BitSpectre");
+        }
+
+        private void checkBoxHyperV_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxUnderstood.Checked)
+            {
+                userModified = true;
+                string data = checkBoxHyperV.Checked ? "1.0" : "99.9";
+                RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
+                    RegistryKeyPermissionCheck.ReadWriteSubTree);
+                rkHv.SetValue("MinVmVersionForCpuBasedMitigations", data, RegistryValueKind.String);
+                rkHv.Close(); 
+            }
         }
     }
 }

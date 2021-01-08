@@ -34,6 +34,7 @@
             this.linkLabelMicrosoft = new System.Windows.Forms.LinkLabel();
             this.checkBoxUnderstood = new System.Windows.Forms.CheckBox();
             this.linkLabelGitHub = new System.Windows.Forms.LinkLabel();
+            this.checkBoxHyperV = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkedListBox1
@@ -42,7 +43,6 @@
             this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.Enabled = false;
             this.checkedListBox1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
             "0 (0) Enable mitigations for CVE-2017-5715 (Spectre Variant 2) and CVE-2017-5754 " +
                 "(Meltdown)",
@@ -69,7 +69,7 @@
             this.checkedListBox1.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(1333, 293);
-            this.checkedListBox1.TabIndex = 2;
+            this.checkedListBox1.TabIndex = 4;
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
             // labelDecimalValue
@@ -80,7 +80,7 @@
             this.labelDecimalValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelDecimalValue.Name = "labelDecimalValue";
             this.labelDecimalValue.Size = new System.Drawing.Size(106, 17);
-            this.labelDecimalValue.TabIndex = 3;
+            this.labelDecimalValue.TabIndex = 5;
             this.labelDecimalValue.Text = "Decimal Value: ";
             // 
             // labelHelp
@@ -91,7 +91,7 @@
             this.labelHelp.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelHelp.Name = "labelHelp";
             this.labelHelp.Size = new System.Drawing.Size(161, 17);
-            this.labelHelp.TabIndex = 5;
+            this.labelHelp.TabIndex = 3;
             this.labelHelp.Text = "Bit # (Value) Description";
             // 
             // linkLabelMicrosoft
@@ -102,7 +102,7 @@
             this.linkLabelMicrosoft.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabelMicrosoft.Name = "linkLabelMicrosoft";
             this.linkLabelMicrosoft.Size = new System.Drawing.Size(215, 17);
-            this.linkLabelMicrosoft.TabIndex = 0;
+            this.linkLabelMicrosoft.TabIndex = 1;
             this.linkLabelMicrosoft.TabStop = true;
             this.linkLabelMicrosoft.Text = "View Microsoft\'s reference article";
             this.linkLabelMicrosoft.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelMicrosoft_LinkClicked);
@@ -116,7 +116,7 @@
             this.checkBoxUnderstood.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxUnderstood.Name = "checkBoxUnderstood";
             this.checkBoxUnderstood.Size = new System.Drawing.Size(476, 21);
-            this.checkBoxUnderstood.TabIndex = 1;
+            this.checkBoxUnderstood.TabIndex = 2;
             this.checkBoxUnderstood.Text = "If you know what you\'re doing and understand the risks, check here -->";
             this.checkBoxUnderstood.UseVisualStyleBackColor = true;
             this.checkBoxUnderstood.CheckedChanged += new System.EventHandler(this.checkBoxUnderstood_CheckedChanged);
@@ -129,10 +129,24 @@
             this.linkLabelGitHub.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabelGitHub.Name = "linkLabelGitHub";
             this.linkLabelGitHub.Size = new System.Drawing.Size(152, 17);
-            this.linkLabelGitHub.TabIndex = 6;
+            this.linkLabelGitHub.TabIndex = 0;
             this.linkLabelGitHub.TabStop = true;
             this.linkLabelGitHub.Text = "View project on GitHub";
             this.linkLabelGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGitHub_LinkClicked);
+            // 
+            // checkBoxHyperV
+            // 
+            this.checkBoxHyperV.AutoSize = true;
+            this.checkBoxHyperV.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxHyperV.Enabled = false;
+            this.checkBoxHyperV.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.checkBoxHyperV.Location = new System.Drawing.Point(520, 324);
+            this.checkBoxHyperV.Name = "checkBoxHyperV";
+            this.checkBoxHyperV.Size = new System.Drawing.Size(285, 21);
+            this.checkBoxHyperV.TabIndex = 6;
+            this.checkBoxHyperV.Text = "Apply mitigations to Hyper-V (if installed)";
+            this.checkBoxHyperV.UseVisualStyleBackColor = true;
+            this.checkBoxHyperV.CheckedChanged += new System.EventHandler(this.checkBoxHyperV_CheckedChanged);
             // 
             // frmSpectre
             // 
@@ -141,12 +155,13 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.ClientSize = new System.Drawing.Size(1343, 350);
+            this.Controls.Add(this.checkBoxHyperV);
+            this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.linkLabelGitHub);
             this.Controls.Add(this.checkBoxUnderstood);
             this.Controls.Add(this.linkLabelMicrosoft);
             this.Controls.Add(this.labelHelp);
             this.Controls.Add(this.labelDecimalValue);
-            this.Controls.Add(this.checkedListBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
@@ -169,5 +184,6 @@
         private System.Windows.Forms.LinkLabel linkLabelMicrosoft;
         private System.Windows.Forms.CheckBox checkBoxUnderstood;
         private System.Windows.Forms.LinkLabel linkLabelGitHub;
+        private System.Windows.Forms.CheckBox checkBoxHyperV;
     }
 }
