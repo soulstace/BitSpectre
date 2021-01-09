@@ -173,5 +173,14 @@ namespace BitSpectre
                 userSetHyperV = true;
             }
         }
+
+        private void labelDecimalValue_DoubleClick(object sender, EventArgs e)
+        {
+            RegistryKey rkLastkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Applets\Regedit", RegistryKeyPermissionCheck.ReadWriteSubTree);
+            rkLastkey.SetValue("Lastkey", @"HKEY_LOCAL_MACHINE\" + subkey);
+            rkLastkey.Close();
+
+            Process.Start("regedit");
+        }
     }
 }

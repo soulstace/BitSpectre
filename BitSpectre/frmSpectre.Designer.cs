@@ -82,6 +82,7 @@
             this.labelDecimalValue.Size = new System.Drawing.Size(106, 17);
             this.labelDecimalValue.TabIndex = 5;
             this.labelDecimalValue.Text = "Decimal Value: ";
+            this.labelDecimalValue.DoubleClick += new System.EventHandler(this.labelDecimalValue_DoubleClick);
             // 
             // labelHelp
             // 
