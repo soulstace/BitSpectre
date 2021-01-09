@@ -13,10 +13,19 @@ namespace BitSpectre
         bool userSetHyperV = false;
         const string subkey = @"SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";
         const string hyperval = "MinVmVersionForCpuBasedMitigations";
+        bool sessionEnding = false;
 
         public frmSpectre()
         {
             InitializeComponent();
+        }
+
+        protected override void WndProc(ref Message msg)
+        {
+            if (msg.Msg == 0x11) //WM_QUERYENDSESSION
+                sessionEnding = true; /* avoid delaying a standard shutdown/restart */
+
+            base.WndProc(ref msg);
         }
 
         private void frmSpectre_Load(object sender, EventArgs e)
@@ -119,20 +128,23 @@ namespace BitSpectre
                 }
 
                 //Prompt to restart
-                if (DialogResult.Yes == MessageBox.Show("Your settings will not take effect until you reboot the system.\nWould you like to restart Windows now?", "Restart required", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1))
+                if (!sessionEnding)
                 {
-                    //try
-                    //{
+                    if (DialogResult.Yes == MessageBox.Show("Your settings will not take effect until you reboot the system.\nWould you like to restart Windows now?", "Restart required", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1))
+                    {
+                        //try
+                        //{
                         NativeMethods.DoExitWin(NativeMethods.EWX_REBOOT);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    MessageBox.Show("You do not have the necessary priviledges to shut down this system.", "Restart failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    //}
-                }
-                else
-                {
-                    MessageBox.Show("Any changes you have made will be applied next time you restart Windows.", "Restart cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                        //}
+                        //catch (Exception)
+                        //{
+                        //    MessageBox.Show("You do not have the necessary priviledges to shut down this system.", "Restart failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        //}
+                    }
+                    else
+                    {
+                        MessageBox.Show("Any changes you have made will be applied next time you restart Windows.", "Restart cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    }
                 }
             }
         }
