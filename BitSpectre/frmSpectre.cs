@@ -176,13 +176,16 @@ namespace BitSpectre
 
         private void labelDecimalValue_DoubleClick(object sender, EventArgs e)
         {
-            MessageBox.Show("Please note: the registry editor will not reflect any changes until BitSpectre has closed and you perform a F5 refresh.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            
-            RegistryKey rkLastkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Applets\Regedit", RegistryKeyPermissionCheck.ReadWriteSubTree);
-            rkLastkey.SetValue("Lastkey", @"HKEY_LOCAL_MACHINE\" + subkey);
-            rkLastkey.Close();
+            if (checkBoxUnderstood.Checked)
+            {
+                MessageBox.Show("Please note: the registry editor will not reflect any changes until BitSpectre has closed and you perform a F5 refresh.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            Process.Start("regedit");
+                RegistryKey rkLastkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Applets\Regedit", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                rkLastkey.SetValue("Lastkey", @"HKEY_LOCAL_MACHINE\" + subkey);
+                rkLastkey.Close();
+
+                Process.Start("regedit");
+            }
         }
     }
 }
