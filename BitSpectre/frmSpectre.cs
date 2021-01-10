@@ -8,11 +8,12 @@ namespace BitSpectre
     public partial class frmSpectre : Form
     {
         int spectreVal = 0;
-        bool regValExists = false;
         bool userModified = false;
         bool userSetHyperV = false;
         const string subkey = @"SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";
         const string hyperval = "MinVmVersionForCpuBasedMitigations";
+        const string _override = "FeatureSettingsOverride";
+        const string s = "Decimal value: ";
         bool sessionEnding = false;
 
         public frmSpectre()
@@ -28,36 +29,46 @@ namespace BitSpectre
             base.WndProc(ref msg);
         }
 
-        private void frmSpectre_Load(object sender, EventArgs e)
+        protected override void OnActivated(EventArgs e)
         {
-            RegistryKey rkSp = Registry.LocalMachine.OpenSubKey(subkey, RegistryKeyPermissionCheck.ReadSubTree);
-            //if (rkSp != null) /* this won't be null on any current version of Windows */
-            //{
-            object objSp = rkSp.GetValue("FeatureSettingsOverride", null);
-            if (objSp != null)
+            spectreVal = 0;
+
+            for (int i = 0; i < checkedListBox1.Items.Count; ++i)
             {
-                regValExists = true;
-                spectreVal = (int)objSp;
+                checkedListBox1.SetItemChecked(i, false);
             }
+
+            RegistryKey rkSp = Registry.LocalMachine.OpenSubKey(subkey, RegistryKeyPermissionCheck.ReadSubTree);
+            object objSp = rkSp.GetValue(_override, null);
+            bool exists = objSp != null;
+            if (exists)
+                spectreVal = (int)objSp;
             rkSp.Close();
-            //}
 
-            labelDecimalValue.Text = "Decimal value: " + spectreVal.ToString();
+            UpdateControls(spectreVal, exists);
+        }
 
-            if (regValExists) //only check checkbox items if the registry value exists
+        void UpdateControls(int value, bool exists)
+        {
+            labelDecimalValue.Text = exists ? s + value.ToString() : s + "null";
+
+            if (exists) //only check checkbox items if the registry value exists
             {
-                if (spectreVal == 0)
-                    checkedListBox1.SetItemCheckState(0, CheckState.Checked); //check 0
+                if (value == 0)
+                    checkedListBox1.SetItemChecked(0, true); //check 0
                 else
                 {
                     for (int i = 0; i < checkedListBox1.Items.Count; ++i)
                     {
-                        if (GetBinaryFlag(spectreVal, i))
-                            checkedListBox1.SetItemCheckState(i + 1, CheckState.Checked); //the first item in the checkedlistbox is 0 and not a valid bit
+                        if (GetBinaryFlag(value, i))
+                            checkedListBox1.SetItemChecked(i + 1, true); //the first item in the checkedlistbox is 0 and not a valid bit
                     }
                 }
             }
+        }
 
+        private void frmSpectre_Load(object sender, EventArgs e)
+        {
             RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
                 RegistryKeyPermissionCheck.ReadSubTree);
             if (rkHv != null)
@@ -83,8 +94,8 @@ namespace BitSpectre
 
         void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            userModified = true; 
-            
+            userModified = true;
+
             if (checkedListBox1.SelectedIndex == 0) //the first item in the checkedlistbox is 0, not the first bit flag
             {
                 spectreVal = 0; //zero the buffer
@@ -92,30 +103,33 @@ namespace BitSpectre
                 for (int i = 0; i < checkedListBox1.Items.Count; ++i)
                 {
                     if (i > 0) //we selected 0 so uncheck all the other items
-                        checkedListBox1.SetItemCheckState(i, CheckState.Unchecked);
+                        checkedListBox1.SetItemChecked(i, false);
                 }
             }
             else //we selected a valid bit
             {
-                checkedListBox1.SetItemCheckState(0, CheckState.Unchecked); //uncheck 0
+                checkedListBox1.SetItemChecked(0, false); //uncheck 0
 
                 bool flag = checkedListBox1.GetItemCheckState(checkedListBox1.SelectedIndex) == CheckState.Checked;
                 spectreVal = SetBinaryFlag(spectreVal, checkedListBox1.SelectedIndex - 1, flag); //the selected index is offset +1 from the first bit in the buffer
-                                                                                                //because the index 0 checkbox isn't used as a bit flag
+                                                                                                 //because the index 0 checkbox isn't used as a bit flag
             }
 
-            labelDecimalValue.Text = "Decimal value: " + spectreVal.ToString();
+            if (spectreVal == 0)
+                checkedListBox1.SetItemChecked(0, true);
+
+            labelDecimalValue.Text = s + spectreVal.ToString();
+
+            RegistryKey rkSp = Registry.LocalMachine.CreateSubKey(subkey, RegistryKeyPermissionCheck.ReadWriteSubTree);
+            rkSp.SetValue(_override, spectreVal);
+            rkSp.SetValue("FeatureSettingsOverrideMask", 3);
+            rkSp.Close();
         }
 
         void frmSpectre_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (userModified && checkBoxUnderstood.Checked)
             {
-                RegistryKey rkSp = Registry.LocalMachine.CreateSubKey(subkey, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rkSp.SetValue("FeatureSettingsOverride", spectreVal);
-                rkSp.SetValue("FeatureSettingsOverrideMask", 3);
-                rkSp.Close();
-
                 if (userSetHyperV)
                 {
                     RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
@@ -131,20 +145,9 @@ namespace BitSpectre
                 if (!sessionEnding)
                 {
                     if (DialogResult.Yes == MessageBox.Show("Your settings will not take effect until you reboot the system.\nWould you like to restart Windows now?", "Restart required", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1))
-                    {
-                        //try
-                        //{
                         NativeMethods.DoExitWin(NativeMethods.EWX_REBOOT);
-                        //}
-                        //catch (Exception)
-                        //{
-                        //    MessageBox.Show("You do not have the necessary priviledges to shut down this system.", "Restart failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        //}
-                    }
                     else
-                    {
                         MessageBox.Show("Any changes you have made will be applied next time you restart Windows.", "Restart cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
-                    }
                 }
             }
         }
@@ -178,7 +181,7 @@ namespace BitSpectre
         {
             if (checkBoxUnderstood.Checked)
             {
-                MessageBox.Show("Please note: the registry editor will not reflect any changes until BitSpectre has closed and you perform a F5 refresh.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please note: the registry editor may not reflect any changes until you perform a F5 refresh.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 RegistryKey rkLastkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Applets\Regedit", RegistryKeyPermissionCheck.ReadWriteSubTree);
                 rkLastkey.SetValue("Lastkey", @"HKEY_LOCAL_MACHINE\" + subkey);
