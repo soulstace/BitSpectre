@@ -7,7 +7,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("BitSpectre")]
 [assembly: AssemblyDescription("Speculative execution side-channel vulnerability mitigations - Bit Editor")]
-[assembly: AssemblyConfiguration("")]
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+ [assembly: AssemblyConfiguration("Release")]
+#endif
 [assembly: AssemblyCompany("soulstace")]
 [assembly: AssemblyProduct("BitSpectre")]
 [assembly: AssemblyCopyright("Copyright © 2020 - current")]
@@ -32,5 +36,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.9.5")]
+[assembly: AssemblyFileVersion("1.0.9.5")]

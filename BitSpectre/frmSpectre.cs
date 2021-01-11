@@ -179,10 +179,6 @@ namespace BitSpectre
                 userSetHyperV = true;
             }
         }
-
-        void labelDecimalValue_DoubleClick(object sender, EventArgs e) =>
-            JumpToKey();
-
         void tsmDelete_Click(object sender, EventArgs e)
         {
             if (DialogResult.Yes == MessageBox.Show("This will delete all Windows registry entries mentioned by the Microsoft reference article above. Not recommended unless you're striving for default settings (possibly unsafe).\n\nAre you sure?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3))
@@ -191,8 +187,7 @@ namespace BitSpectre
                 tryDelete(subkey, _mask);
                 tryDelete(subkey2, hyperval);
             }
-            else
-                showMsg("Nothing was deleted.");
+            else showMsg("Nothing was deleted.");
         }
 
         void tryDelete(string key, string val)
@@ -212,8 +207,9 @@ namespace BitSpectre
         void showMsg(string msg) => 
             MessageBox.Show(msg, "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
 
-        void tsmJump_Click(object sender, EventArgs e) =>
-            JumpToKey();
+        void labelDecimalValue_DoubleClick(object sender, EventArgs e) => JumpToKey();
+
+        void tsmJump_Click(object sender, EventArgs e) => JumpToKey();
 
         void JumpToKey()
         {
