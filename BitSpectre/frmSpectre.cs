@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace BitSpectre
@@ -11,8 +12,11 @@ namespace BitSpectre
         bool userModified = false;
         bool userSetHyperV = false;
         const string subkey = @"SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";
+        const string subkey2 = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization";
         const string hyperval = "MinVmVersionForCpuBasedMitigations";
+        //const string features = "FeatureSettings";
         const string _override = "FeatureSettingsOverride";
+        const string _mask = "FeatureSettingsOverrideMask";
         const string s = "Decimal value: ";
         bool sessionEnding = false;
 
@@ -69,8 +73,10 @@ namespace BitSpectre
 
         private void frmSpectre_Load(object sender, EventArgs e)
         {
-            RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
-                RegistryKeyPermissionCheck.ReadSubTree);
+            cms1.Enabled = false;
+            checkBoxHyperV.ForeColor = Color.Gray;
+
+            RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(subkey2, RegistryKeyPermissionCheck.ReadSubTree);
             if (rkHv != null)
             {
                 checkBoxHyperV.Checked = rkHv.GetValue(hyperval, "").ToString() == "1.0" ? true : false;
@@ -122,7 +128,7 @@ namespace BitSpectre
 
             RegistryKey rkSp = Registry.LocalMachine.CreateSubKey(subkey, RegistryKeyPermissionCheck.ReadWriteSubTree);
             rkSp.SetValue(_override, spectreVal);
-            rkSp.SetValue("FeatureSettingsOverrideMask", 3);
+            rkSp.SetValue(_mask, 3);
             rkSp.Close();
         }
 
@@ -132,8 +138,7 @@ namespace BitSpectre
             {
                 if (userSetHyperV)
                 {
-                    RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization",
-                            RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(subkey2, RegistryKeyPermissionCheck.ReadWriteSubTree);
                     if (checkBoxHyperV.Checked)
                         rkHv.SetValue(hyperval, "1.0", RegistryValueKind.String);
                     else
@@ -152,23 +157,21 @@ namespace BitSpectre
             }
         }
 
-        void linkLabelMicrosoft_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
+        void linkLabelMicrosoft_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
             Process.Start("https://support.microsoft.com/en-us/help/4072698/windows-server-speculative-execution-side-channel-vulnerabilities");
-        }
 
         void checkBoxUnderstood_CheckedChanged(object sender, EventArgs e)
         {
             checkedListBox1.Enabled = checkBoxUnderstood.Checked;
-            checkBoxHyperV.Enabled = checkBoxUnderstood.Checked;
+            tpHyperV.Visible = !checkBoxUnderstood.Checked;
+            checkBoxHyperV.ForeColor = !checkBoxUnderstood.Checked ? Color.Gray : Color.WhiteSmoke;
+            cms1.Enabled = checkBoxUnderstood.Checked;
         }
 
-        void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
+        void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
             Process.Start("https://github.com/soulstace/BitSpectre");
-        }
 
-        private void checkBoxHyperV_CheckedChanged(object sender, EventArgs e)
+        void checkBoxHyperV_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxUnderstood.Checked)
             {
@@ -177,11 +180,46 @@ namespace BitSpectre
             }
         }
 
-        private void labelDecimalValue_DoubleClick(object sender, EventArgs e)
+        void labelDecimalValue_DoubleClick(object sender, EventArgs e) =>
+            JumpToKey();
+
+        void tsmDelete_Click(object sender, EventArgs e)
+        {
+            if (DialogResult.Yes == MessageBox.Show("This will delete all Windows registry entries mentioned by the Microsoft reference article above. Not recommended unless you're striving for default settings (possibly unsafe).\n\nAre you sure?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3))
+            {
+                tryDelete(subkey, _override);
+                tryDelete(subkey, _mask);
+                tryDelete(subkey2, hyperval);
+            }
+            else
+                showMsg("Nothing was deleted.");
+        }
+
+        void tryDelete(string key, string val)
+        {
+            RegistryKey r = Registry.LocalMachine.OpenSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree);
+            try
+            {
+                r.DeleteValue(val, true);
+                userModified = true;
+                showMsg(val + " was deleted.");
+            }
+            catch (Exception x) { showMsg(x.Message + " " + val); }
+            finally { userSetHyperV = false; }
+            if (r != null) r.Close();
+        }
+
+        void showMsg(string msg) => 
+            MessageBox.Show(msg, "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+
+        void tsmJump_Click(object sender, EventArgs e) =>
+            JumpToKey();
+
+        void JumpToKey()
         {
             if (checkBoxUnderstood.Checked)
             {
-                MessageBox.Show("Please note: the registry editor may not reflect any changes until you perform a F5 refresh.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                showMsg("Please note: the registry editor may not reflect your changes until you perform a F5 refresh.");
 
                 RegistryKey rkLastkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Applets\Regedit", RegistryKeyPermissionCheck.ReadWriteSubTree);
                 rkLastkey.SetValue("Lastkey", @"HKEY_LOCAL_MACHINE\" + subkey);

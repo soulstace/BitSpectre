@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace BitSpectre
@@ -13,9 +14,21 @@ namespace BitSpectre
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmSpectre());
+            string name = "BitSpectre";
+            using (Mutex m = new Mutex(false, name))
+            {
+                if (!m.WaitOne(0, false))
+                {
+                    MessageBox.Show(name + " is already running. Check your Windows taskbar.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                else
+                {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.Run(new frmSpectre());
+                }
+            }
         }
     }
 }
