@@ -11,9 +11,9 @@ namespace BitSpectre
         int spectreVal = 0;
         bool userModified = false;
         bool userSetHyperV = false;
-        const string subkey = @"SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";
-        const string subkey2 = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization";
-        const string hyperval = "MinVmVersionForCpuBasedMitigations";
+        const string mmkey = @"SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";
+        const string hypkey = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization";
+        const string hypval = "MinVmVersionForCpuBasedMitigations";
         //const string features = "FeatureSettings";
         const string _override = "FeatureSettingsOverride";
         const string _mask = "FeatureSettingsOverrideMask";
@@ -42,7 +42,7 @@ namespace BitSpectre
                 clbox.SetItemChecked(i, false);
             }
 
-            RegistryKey rkSp = Registry.LocalMachine.OpenSubKey(subkey, RegistryKeyPermissionCheck.ReadSubTree);
+            RegistryKey rkSp = Registry.LocalMachine.OpenSubKey(mmkey, RegistryKeyPermissionCheck.ReadSubTree);
             object objSp = rkSp.GetValue(_override, null);
             bool exists = objSp != null;
             if (exists)
@@ -77,10 +77,10 @@ namespace BitSpectre
             cbHyperV.ForeColor = Color.Gray;
             miVersion.Text = GetType().Namespace + " v" + GetType().Assembly.GetName().Version.ToString();
 
-            RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(subkey2, RegistryKeyPermissionCheck.ReadSubTree);
+            RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(hypkey, RegistryKeyPermissionCheck.ReadSubTree);
             if (rkHv != null)
             {
-                cbHyperV.Checked = rkHv.GetValue(hyperval, "").ToString() == "1.0" ? true : false;
+                cbHyperV.Checked = rkHv.GetValue(hypval, "").ToString() == "1.0" ? true : false;
                 rkHv.Close();
             }
         }
@@ -99,7 +99,7 @@ namespace BitSpectre
             return (value & (1 << index)) != 0;
         }
 
-        void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        void clbox_SelectedIndexChanged(object sender, EventArgs e)
         {
             userModified = true;
 
@@ -127,7 +127,7 @@ namespace BitSpectre
 
             lbDecimal.Text = strDec + spectreVal.ToString();
 
-            RegistryKey rkSp = Registry.LocalMachine.CreateSubKey(subkey, RegistryKeyPermissionCheck.ReadWriteSubTree);
+            RegistryKey rkSp = Registry.LocalMachine.CreateSubKey(mmkey, RegistryKeyPermissionCheck.ReadWriteSubTree);
             rkSp.SetValue(_override, spectreVal);
             rkSp.SetValue(_mask, 3);
             rkSp.Close();
@@ -139,11 +139,11 @@ namespace BitSpectre
             {
                 if (userSetHyperV)
                 {
-                    RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(subkey2, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                    RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(hypkey, RegistryKeyPermissionCheck.ReadWriteSubTree);
                     if (cbHyperV.Checked)
-                        rkHv.SetValue(hyperval, "1.0", RegistryValueKind.String);
+                        rkHv.SetValue(hypval, "1.0", RegistryValueKind.String);
                     else
-                        rkHv.DeleteValue(hyperval, false);
+                        rkHv.DeleteValue(hypval, false);
                     rkHv.Close();
                 }
 
@@ -158,10 +158,10 @@ namespace BitSpectre
             }
         }
 
-        void linkLabelMicrosoft_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
+        void lbMS_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
             Process.Start("https://support.microsoft.com/en-us/help/4072698/windows-server-speculative-execution-side-channel-vulnerabilities");
 
-        void checkBoxUnderstood_CheckedChanged(object sender, EventArgs e)
+        void cbUnderstood_CheckedChanged(object sender, EventArgs e)
         {
             clbox.Enabled = cbUnderstood.Checked;
             tphv.Visible = !cbUnderstood.Checked;
@@ -169,7 +169,7 @@ namespace BitSpectre
             cms1.Enabled = cbUnderstood.Checked;
         }
 
-        void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
+        void lbGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
             Process.Start("https://github.com/soulstace/BitSpectre");
 
         void checkBoxHyperV_CheckedChanged(object sender, EventArgs e)
@@ -184,9 +184,9 @@ namespace BitSpectre
         {
             if (DialogResult.Yes == MessageBox.Show("This will delete all Windows registry entries mentioned by the Microsoft reference article above. Not recommended unless you're striving for default settings (possibly unsafe).\n\nAre you sure?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3))
             {
-                tryDelete(subkey, _override);
-                tryDelete(subkey, _mask);
-                tryDelete(subkey2, hyperval);
+                tryDelete(mmkey, _override);
+                tryDelete(mmkey, _mask);
+                tryDelete(hypkey, hypval);
             }
             else showMsg("Nothing was deleted.");
         }
@@ -208,7 +208,7 @@ namespace BitSpectre
         void showMsg(string msg) => 
             MessageBox.Show(msg, "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
 
-        void labelDecimalValue_DoubleClick(object sender, EventArgs e) => JumpToKey();
+        void lbDecimal_DoubleClick(object sender, EventArgs e) => JumpToKey();
 
         void miJump_Click(object sender, EventArgs e) => JumpToKey();
 
@@ -219,7 +219,7 @@ namespace BitSpectre
                 showMsg("Please note: the registry editor may not reflect your changes until you perform a F5 refresh.");
 
                 RegistryKey rkLastkey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Applets\Regedit", RegistryKeyPermissionCheck.ReadWriteSubTree);
-                rkLastkey.SetValue("Lastkey", @"HKEY_LOCAL_MACHINE\" + subkey);
+                rkLastkey.SetValue("Lastkey", @"HKEY_LOCAL_MACHINE\" + mmkey);
                 rkLastkey.Close();
 
                 Process.Start("regedit");

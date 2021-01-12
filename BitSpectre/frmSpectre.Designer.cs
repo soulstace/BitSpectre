@@ -79,7 +79,7 @@
             this.clbox.Name = "clbox";
             this.clbox.Size = new System.Drawing.Size(932, 229);
             this.clbox.TabIndex = 4;
-            this.clbox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
+            this.clbox.SelectedIndexChanged += new System.EventHandler(this.clbox_SelectedIndexChanged);
             // 
             // lbDecimal
             // 
@@ -90,7 +90,7 @@
             this.lbDecimal.Size = new System.Drawing.Size(81, 13);
             this.lbDecimal.TabIndex = 5;
             this.lbDecimal.Text = "Decimal Value: ";
-            this.lbDecimal.DoubleClick += new System.EventHandler(this.labelDecimalValue_DoubleClick);
+            this.lbDecimal.DoubleClick += new System.EventHandler(this.lbDecimal_DoubleClick);
             // 
             // lbHelp
             // 
@@ -112,7 +112,7 @@
             this.lbMS.TabIndex = 1;
             this.lbMS.TabStop = true;
             this.lbMS.Text = "View Microsoft\'s reference article";
-            this.lbMS.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelMicrosoft_LinkClicked);
+            this.lbMS.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbMS_LinkClicked);
             // 
             // cbUnderstood
             // 
@@ -125,7 +125,7 @@
             this.cbUnderstood.TabIndex = 2;
             this.cbUnderstood.Text = "If you know what you\'re doing and understand the risks, check here -->";
             this.cbUnderstood.UseVisualStyleBackColor = true;
-            this.cbUnderstood.CheckedChanged += new System.EventHandler(this.checkBoxUnderstood_CheckedChanged);
+            this.cbUnderstood.CheckedChanged += new System.EventHandler(this.cbUnderstood_CheckedChanged);
             // 
             // lbGitHub
             // 
@@ -137,7 +137,7 @@
             this.lbGitHub.TabIndex = 0;
             this.lbGitHub.TabStop = true;
             this.lbGitHub.Text = "View project on GitHub";
-            this.lbGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGitHub_LinkClicked);
+            this.lbGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbGitHub_LinkClicked);
             // 
             // cbHyperV
             // 
