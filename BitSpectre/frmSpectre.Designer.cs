@@ -41,6 +41,28 @@
             this.miSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.miDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.miSep2 = new System.Windows.Forms.ToolStripSeparator();
+            this.miTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCertificates = new System.Windows.Forms.ToolStripMenuItem();
+            this.miLsStores = new System.Windows.Forms.ToolStripMenuItem();
+            this.miRecurse = new System.Windows.Forms.ToolStripMenuItem();
+            this.miComputerInfo = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetDNS = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetExecutionPolicy = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetMMAgent = new System.Windows.Forms.ToolStripMenuItem();
+            this.miPackages = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetAppx = new System.Windows.Forms.ToolStripMenuItem();
+            this.miStdPackages = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetProcess = new System.Windows.Forms.ToolStripMenuItem();
+            this.miProcMitigation = new System.Windows.Forms.ToolStripMenuItem();
+            this.miFullPolicy = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSchedTasks = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetService = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSMB = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetSmbSession = new System.Windows.Forms.ToolStripMenuItem();
+            this.miGetSmbShare = new System.Windows.Forms.ToolStripMenuItem();
+            this.miTPM = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSep3 = new System.Windows.Forms.ToolStripSeparator();
             this.miVersion = new System.Windows.Forms.ToolStripMenuItem();
             this.tphv = new BitSpectre.TPanel();
             this.cms1.SuspendLayout();
@@ -77,7 +99,7 @@
             this.clbox.Location = new System.Drawing.Point(4, 20);
             this.clbox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.clbox.Name = "clbox";
-            this.clbox.Size = new System.Drawing.Size(932, 229);
+            this.clbox.Size = new System.Drawing.Size(932, 244);
             this.clbox.TabIndex = 4;
             this.clbox.SelectedIndexChanged += new System.EventHandler(this.clbox_SelectedIndexChanged);
             // 
@@ -85,7 +107,7 @@
             // 
             this.lbDecimal.AutoSize = true;
             this.lbDecimal.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lbDecimal.Location = new System.Drawing.Point(4, 252);
+            this.lbDecimal.Location = new System.Drawing.Point(4, 268);
             this.lbDecimal.Name = "lbDecimal";
             this.lbDecimal.Size = new System.Drawing.Size(81, 13);
             this.lbDecimal.TabIndex = 5;
@@ -131,7 +153,7 @@
             // 
             this.lbGitHub.AutoSize = true;
             this.lbGitHub.LinkColor = System.Drawing.Color.DarkTurquoise;
-            this.lbGitHub.Location = new System.Drawing.Point(820, 252);
+            this.lbGitHub.Location = new System.Drawing.Point(820, 268);
             this.lbGitHub.Name = "lbGitHub";
             this.lbGitHub.Size = new System.Drawing.Size(116, 13);
             this.lbGitHub.TabIndex = 0;
@@ -144,7 +166,7 @@
             this.cbHyperV.AutoSize = true;
             this.cbHyperV.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cbHyperV.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.cbHyperV.Location = new System.Drawing.Point(372, 252);
+            this.cbHyperV.Location = new System.Drawing.Point(372, 268);
             this.cbHyperV.Margin = new System.Windows.Forms.Padding(2);
             this.cbHyperV.Name = "cbHyperV";
             this.cbHyperV.Size = new System.Drawing.Size(212, 17);
@@ -163,9 +185,13 @@
             this.miSep1,
             this.miDelete,
             this.miSep2,
+            this.miTools,
+            this.miSep3,
             this.miVersion});
             this.cms1.Name = "cm1";
-            this.cms1.Size = new System.Drawing.Size(140, 82);
+            this.cms1.Size = new System.Drawing.Size(140, 110);
+            this.cms1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cms1_Closed);
+            this.cms1.Opening += new System.ComponentModel.CancelEventHandler(this.cms1_Opening);
             // 
             // miJump
             // 
@@ -193,6 +219,179 @@
             this.miSep2.Name = "miSep2";
             this.miSep2.Size = new System.Drawing.Size(136, 6);
             // 
+            // miTools
+            // 
+            this.miTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miCertificates,
+            this.miComputerInfo,
+            this.miGetDNS,
+            this.miGetExecutionPolicy,
+            this.miGetMMAgent,
+            this.miPackages,
+            this.miGetProcess,
+            this.miProcMitigation,
+            this.miSchedTasks,
+            this.miGetService,
+            this.miSMB,
+            this.miTPM});
+            this.miTools.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.miTools.Name = "miTools";
+            this.miTools.Size = new System.Drawing.Size(139, 22);
+            this.miTools.Text = "Tools";
+            // 
+            // miCertificates
+            // 
+            this.miCertificates.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miLsStores,
+            this.miRecurse});
+            this.miCertificates.Name = "miCertificates";
+            this.miCertificates.Size = new System.Drawing.Size(172, 22);
+            this.miCertificates.Text = "Certificates";
+            // 
+            // miLsStores
+            // 
+            this.miLsStores.Name = "miLsStores";
+            this.miLsStores.Size = new System.Drawing.Size(127, 22);
+            this.miLsStores.Text = "List Stores";
+            this.miLsStores.Click += new System.EventHandler(this.miLsStores_Click);
+            // 
+            // miRecurse
+            // 
+            this.miRecurse.Name = "miRecurse";
+            this.miRecurse.Size = new System.Drawing.Size(127, 22);
+            this.miRecurse.Text = "Recursive";
+            this.miRecurse.Click += new System.EventHandler(this.miRecurse_Click);
+            // 
+            // miComputerInfo
+            // 
+            this.miComputerInfo.Name = "miComputerInfo";
+            this.miComputerInfo.Size = new System.Drawing.Size(172, 22);
+            this.miComputerInfo.Text = "Computer Info";
+            this.miComputerInfo.Click += new System.EventHandler(this.miComputerInfo_Click);
+            // 
+            // miGetDNS
+            // 
+            this.miGetDNS.Name = "miGetDNS";
+            this.miGetDNS.Size = new System.Drawing.Size(172, 22);
+            this.miGetDNS.Text = "DNS Client Cache";
+            this.miGetDNS.Click += new System.EventHandler(this.miGetDNS_Click);
+            // 
+            // miGetExecutionPolicy
+            // 
+            this.miGetExecutionPolicy.Name = "miGetExecutionPolicy";
+            this.miGetExecutionPolicy.Size = new System.Drawing.Size(172, 22);
+            this.miGetExecutionPolicy.Text = "Execution Policy";
+            this.miGetExecutionPolicy.Click += new System.EventHandler(this.miGetExecutionPolicy_Click);
+            // 
+            // miGetMMAgent
+            // 
+            this.miGetMMAgent.Name = "miGetMMAgent";
+            this.miGetMMAgent.Size = new System.Drawing.Size(172, 22);
+            this.miGetMMAgent.Text = "MMAgent";
+            this.miGetMMAgent.Click += new System.EventHandler(this.miGetMMAgent_Click);
+            // 
+            // miPackages
+            // 
+            this.miPackages.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miGetAppx,
+            this.miStdPackages});
+            this.miPackages.Name = "miPackages";
+            this.miPackages.Size = new System.Drawing.Size(172, 22);
+            this.miPackages.Text = "Packages";
+            // 
+            // miGetAppx
+            // 
+            this.miGetAppx.Name = "miGetAppx";
+            this.miGetAppx.Size = new System.Drawing.Size(121, 22);
+            this.miGetAppx.Text = "Appx";
+            this.miGetAppx.Click += new System.EventHandler(this.miGetAppx_Click);
+            // 
+            // miStdPackages
+            // 
+            this.miStdPackages.Name = "miStdPackages";
+            this.miStdPackages.Size = new System.Drawing.Size(121, 22);
+            this.miStdPackages.Text = "Standard";
+            this.miStdPackages.Click += new System.EventHandler(this.miStdPackages_Click);
+            // 
+            // miGetProcess
+            // 
+            this.miGetProcess.Name = "miGetProcess";
+            this.miGetProcess.Size = new System.Drawing.Size(172, 22);
+            this.miGetProcess.Text = "Processes";
+            this.miGetProcess.Click += new System.EventHandler(this.miGetProcess_Click);
+            // 
+            // miProcMitigation
+            // 
+            this.miProcMitigation.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miFullPolicy,
+            this.miSystem});
+            this.miProcMitigation.Name = "miProcMitigation";
+            this.miProcMitigation.Size = new System.Drawing.Size(172, 22);
+            this.miProcMitigation.Text = "Process Mitigation";
+            // 
+            // miFullPolicy
+            // 
+            this.miFullPolicy.Name = "miFullPolicy";
+            this.miFullPolicy.Size = new System.Drawing.Size(128, 22);
+            this.miFullPolicy.Text = "Full Policy";
+            this.miFullPolicy.Click += new System.EventHandler(this.miFullPolicy_Click);
+            // 
+            // miSystem
+            // 
+            this.miSystem.Name = "miSystem";
+            this.miSystem.Size = new System.Drawing.Size(128, 22);
+            this.miSystem.Text = "System";
+            this.miSystem.Click += new System.EventHandler(this.miSystem_Click);
+            // 
+            // miSchedTasks
+            // 
+            this.miSchedTasks.Name = "miSchedTasks";
+            this.miSchedTasks.Size = new System.Drawing.Size(172, 22);
+            this.miSchedTasks.Text = "Scheduled Tasks";
+            this.miSchedTasks.Click += new System.EventHandler(this.miSchedTasks_Click);
+            // 
+            // miGetService
+            // 
+            this.miGetService.Name = "miGetService";
+            this.miGetService.Size = new System.Drawing.Size(172, 22);
+            this.miGetService.Text = "Services";
+            this.miGetService.Click += new System.EventHandler(this.miGetService_Click);
+            // 
+            // miSMB
+            // 
+            this.miSMB.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miGetSmbSession,
+            this.miGetSmbShare});
+            this.miSMB.Name = "miSMB";
+            this.miSMB.Size = new System.Drawing.Size(172, 22);
+            this.miSMB.Text = "SMB";
+            // 
+            // miGetSmbSession
+            // 
+            this.miGetSmbSession.Name = "miGetSmbSession";
+            this.miGetSmbSession.Size = new System.Drawing.Size(118, 22);
+            this.miGetSmbSession.Text = "Sessions";
+            this.miGetSmbSession.Click += new System.EventHandler(this.miGetSmbSession_Click);
+            // 
+            // miGetSmbShare
+            // 
+            this.miGetSmbShare.Name = "miGetSmbShare";
+            this.miGetSmbShare.Size = new System.Drawing.Size(118, 22);
+            this.miGetSmbShare.Text = "Shares";
+            this.miGetSmbShare.Click += new System.EventHandler(this.miGetSmbShare_Click_1);
+            // 
+            // miTPM
+            // 
+            this.miTPM.Name = "miTPM";
+            this.miTPM.Size = new System.Drawing.Size(172, 22);
+            this.miTPM.Text = "TPM";
+            this.miTPM.Click += new System.EventHandler(this.miTPM_Click);
+            // 
+            // miSep3
+            // 
+            this.miSep3.Name = "miSep3";
+            this.miSep3.Size = new System.Drawing.Size(136, 6);
+            // 
             // miVersion
             // 
             this.miVersion.ForeColor = System.Drawing.Color.Gray;
@@ -201,7 +400,7 @@
             // 
             // tphv
             // 
-            this.tphv.Location = new System.Drawing.Point(336, 248);
+            this.tphv.Location = new System.Drawing.Point(336, 264);
             this.tphv.Margin = new System.Windows.Forms.Padding(2);
             this.tphv.Name = "tphv";
             this.tphv.Size = new System.Drawing.Size(284, 24);
@@ -213,7 +412,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(941, 270);
+            this.ClientSize = new System.Drawing.Size(941, 285);
             this.ContextMenuStrip = this.cms1;
             this.Controls.Add(this.tphv);
             this.Controls.Add(this.cbHyperV);
@@ -253,5 +452,27 @@
         private TPanel tphv;
         private System.Windows.Forms.ToolStripSeparator miSep2;
         private System.Windows.Forms.ToolStripMenuItem miVersion;
+        private System.Windows.Forms.ToolStripMenuItem miTools;
+        private System.Windows.Forms.ToolStripMenuItem miProcMitigation;
+        private System.Windows.Forms.ToolStripMenuItem miFullPolicy;
+        private System.Windows.Forms.ToolStripMenuItem miSystem;
+        private System.Windows.Forms.ToolStripMenuItem miCertificates;
+        private System.Windows.Forms.ToolStripMenuItem miRecurse;
+        private System.Windows.Forms.ToolStripSeparator miSep3;
+        private System.Windows.Forms.ToolStripMenuItem miLsStores;
+        private System.Windows.Forms.ToolStripMenuItem miGetMMAgent;
+        private System.Windows.Forms.ToolStripMenuItem miGetExecutionPolicy;
+        private System.Windows.Forms.ToolStripMenuItem miGetProcess;
+        private System.Windows.Forms.ToolStripMenuItem miGetService;
+        private System.Windows.Forms.ToolStripMenuItem miGetDNS;
+        private System.Windows.Forms.ToolStripMenuItem miComputerInfo;
+        private System.Windows.Forms.ToolStripMenuItem miTPM;
+        private System.Windows.Forms.ToolStripMenuItem miPackages;
+        private System.Windows.Forms.ToolStripMenuItem miSMB;
+        private System.Windows.Forms.ToolStripMenuItem miGetSmbShare;
+        private System.Windows.Forms.ToolStripMenuItem miGetSmbSession;
+        private System.Windows.Forms.ToolStripMenuItem miGetAppx;
+        private System.Windows.Forms.ToolStripMenuItem miStdPackages;
+        private System.Windows.Forms.ToolStripMenuItem miSchedTasks;
     }
 }

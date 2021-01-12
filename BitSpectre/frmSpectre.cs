@@ -73,7 +73,8 @@ namespace BitSpectre
 
         private void frmSpectre_Load(object sender, EventArgs e)
         {
-            cms1.Enabled = false;
+            miJump.Enabled = false;
+            miDelete.Enabled = false;
             cbHyperV.ForeColor = Color.Gray;
             miVersion.Text = GetType().Namespace + " v" + GetType().Assembly.GetName().Version.ToString();
 
@@ -165,8 +166,9 @@ namespace BitSpectre
         {
             clbox.Enabled = cbUnderstood.Checked;
             tphv.Visible = !cbUnderstood.Checked;
+            miJump.Enabled = cbUnderstood.Checked;
+            miDelete.Enabled = cbUnderstood.Checked;
             cbHyperV.ForeColor = !cbUnderstood.Checked ? Color.Gray : Color.WhiteSmoke;
-            cms1.Enabled = cbUnderstood.Checked;
         }
 
         void lbGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
@@ -224,6 +226,103 @@ namespace BitSpectre
 
                 Process.Start("regedit");
             }
+        }
+
+        void RunPSCmd(string args)
+        {
+            Process.Start(new ProcessStartInfo("PowerShell", "-NoExit " + args));
+        }
+
+        private void miFullPolicy_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-ProcessMitigation -FullPolicy");
+        }
+
+        private void miSystem_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-ProcessMitigation -System");
+        }
+
+        private void miRecurse_Click(object sender, EventArgs e)
+        {
+            RunPSCmd(@"Get-ChildItem Cert:\ -Recurse");
+        }
+
+        private void miLsStores_Click(object sender, EventArgs e)
+        {
+            RunPSCmd(@"ls Cert:\LocalMachine");
+        }
+
+        private void miGetMMAgent_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-MMAgent");
+        }
+
+        private void miGetExecutionPolicy_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-ExecutionPolicy -List");
+        }
+
+        private void miGetProcess_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-Process | Sort ProcessName");
+        }
+
+        private void miGetService_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-Service | Sort Name");
+        }
+
+        private void miGetDNS_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-DnsClientCache");
+        }
+
+        private void miComputerInfo_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-ComputerInfo");
+        }
+
+        private void miTPM_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-Tpm");
+        }
+
+        private void miGetSmbShare_Click_1(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-SmbShare");
+        }
+
+        private void miGetSmbSession_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-SmbSession");
+        }
+
+        private void miGetAppx_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-AppxPackage -AllUsers | Select Name, PackageFamilyName, Version, Status | Sort Name");
+        }
+
+        private void miStdPackages_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-Package | Sort Name");
+        }
+
+        private void miSchedTasks_Click(object sender, EventArgs e)
+        {
+            RunPSCmd("Get-ScheduledTask");
+        }
+
+        private void cms1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            clbox.Enabled = cbUnderstood.Checked;
+            cbUnderstood.Visible = true;
+        }
+
+        private void cms1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            clbox.Enabled = false;
+            cbUnderstood.Visible = false;
         }
     }
 }
