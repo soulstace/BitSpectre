@@ -17,7 +17,7 @@ namespace BitSpectre
         //const string features = "FeatureSettings";
         const string _override = "FeatureSettingsOverride";
         const string _mask = "FeatureSettingsOverrideMask";
-        const string s = "Decimal value: ";
+        const string strDec = "Decimal value: ";
         bool sessionEnding = false;
 
         public frmSpectre()
@@ -37,9 +37,9 @@ namespace BitSpectre
         {
             spectreVal = 0;
 
-            for (int i = 0; i < checkedListBox1.Items.Count; ++i)
+            for (int i = 0; i < clbox.Items.Count; ++i)
             {
-                checkedListBox1.SetItemChecked(i, false);
+                clbox.SetItemChecked(i, false);
             }
 
             RegistryKey rkSp = Registry.LocalMachine.OpenSubKey(subkey, RegistryKeyPermissionCheck.ReadSubTree);
@@ -54,18 +54,18 @@ namespace BitSpectre
 
         void UpdateControls(int value, bool exists)
         {
-            labelDecimalValue.Text = exists ? s + value.ToString() : s + "null";
+            lbDecimal.Text = exists ? strDec + value.ToString() : strDec + "null";
 
             if (exists) //only check checkbox items if the registry value exists
             {
                 if (value == 0)
-                    checkedListBox1.SetItemChecked(0, true); //check 0
+                    clbox.SetItemChecked(0, true); //check 0
                 else
                 {
-                    for (int i = 0; i < checkedListBox1.Items.Count; ++i)
+                    for (int i = 0; i < clbox.Items.Count; ++i)
                     {
                         if (GetBinaryFlag(value, i))
-                            checkedListBox1.SetItemChecked(i + 1, true); //the first item in the checkedlistbox is 0 and not a valid bit
+                            clbox.SetItemChecked(i + 1, true); //the first item in the checkedlistbox is 0 and not a valid bit
                     }
                 }
             }
@@ -74,12 +74,13 @@ namespace BitSpectre
         private void frmSpectre_Load(object sender, EventArgs e)
         {
             cms1.Enabled = false;
-            checkBoxHyperV.ForeColor = Color.Gray;
+            cbHyperV.ForeColor = Color.Gray;
+            miVersion.Text = GetType().Namespace + " v" + GetType().Assembly.GetName().Version.ToString();
 
             RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(subkey2, RegistryKeyPermissionCheck.ReadSubTree);
             if (rkHv != null)
             {
-                checkBoxHyperV.Checked = rkHv.GetValue(hyperval, "").ToString() == "1.0" ? true : false;
+                cbHyperV.Checked = rkHv.GetValue(hyperval, "").ToString() == "1.0" ? true : false;
                 rkHv.Close();
             }
         }
@@ -102,29 +103,29 @@ namespace BitSpectre
         {
             userModified = true;
 
-            if (checkedListBox1.SelectedIndex == 0) //the first item in the checkedlistbox is 0, not the first bit flag
+            if (clbox.SelectedIndex == 0) //the first item in the checkedlistbox is 0, not the first bit flag
             {
                 spectreVal = 0; //zero the buffer
 
-                for (int i = 0; i < checkedListBox1.Items.Count; ++i)
+                for (int i = 0; i < clbox.Items.Count; ++i)
                 {
                     if (i > 0) //we selected 0 so uncheck all the other items
-                        checkedListBox1.SetItemChecked(i, false);
+                        clbox.SetItemChecked(i, false);
                 }
             }
             else //we selected a valid bit
             {
-                checkedListBox1.SetItemChecked(0, false); //uncheck 0
+                clbox.SetItemChecked(0, false); //uncheck 0
 
-                bool flag = checkedListBox1.GetItemCheckState(checkedListBox1.SelectedIndex) == CheckState.Checked;
-                spectreVal = SetBinaryFlag(spectreVal, checkedListBox1.SelectedIndex - 1, flag); //the selected index is offset +1 from the first bit in the buffer
+                bool flag = clbox.GetItemCheckState(clbox.SelectedIndex) == CheckState.Checked;
+                spectreVal = SetBinaryFlag(spectreVal, clbox.SelectedIndex - 1, flag); //the selected index is offset +1 from the first bit in the buffer
                                                                                                  //because the index 0 checkbox isn't used as a bit flag
             }
 
             if (spectreVal == 0)
-                checkedListBox1.SetItemChecked(0, true);
+                clbox.SetItemChecked(0, true);
 
-            labelDecimalValue.Text = s + spectreVal.ToString();
+            lbDecimal.Text = strDec + spectreVal.ToString();
 
             RegistryKey rkSp = Registry.LocalMachine.CreateSubKey(subkey, RegistryKeyPermissionCheck.ReadWriteSubTree);
             rkSp.SetValue(_override, spectreVal);
@@ -134,12 +135,12 @@ namespace BitSpectre
 
         void frmSpectre_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (userModified && checkBoxUnderstood.Checked)
+            if (userModified && cbUnderstood.Checked)
             {
                 if (userSetHyperV)
                 {
                     RegistryKey rkHv = Registry.LocalMachine.CreateSubKey(subkey2, RegistryKeyPermissionCheck.ReadWriteSubTree);
-                    if (checkBoxHyperV.Checked)
+                    if (cbHyperV.Checked)
                         rkHv.SetValue(hyperval, "1.0", RegistryValueKind.String);
                     else
                         rkHv.DeleteValue(hyperval, false);
@@ -162,10 +163,10 @@ namespace BitSpectre
 
         void checkBoxUnderstood_CheckedChanged(object sender, EventArgs e)
         {
-            checkedListBox1.Enabled = checkBoxUnderstood.Checked;
-            tpHyperV.Visible = !checkBoxUnderstood.Checked;
-            checkBoxHyperV.ForeColor = !checkBoxUnderstood.Checked ? Color.Gray : Color.WhiteSmoke;
-            cms1.Enabled = checkBoxUnderstood.Checked;
+            clbox.Enabled = cbUnderstood.Checked;
+            tphv.Visible = !cbUnderstood.Checked;
+            cbHyperV.ForeColor = !cbUnderstood.Checked ? Color.Gray : Color.WhiteSmoke;
+            cms1.Enabled = cbUnderstood.Checked;
         }
 
         void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
@@ -173,13 +174,13 @@ namespace BitSpectre
 
         void checkBoxHyperV_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxUnderstood.Checked)
+            if (cbUnderstood.Checked)
             {
                 userModified = true;
                 userSetHyperV = true;
             }
         }
-        void tsmDelete_Click(object sender, EventArgs e)
+        void miDelete_Click(object sender, EventArgs e)
         {
             if (DialogResult.Yes == MessageBox.Show("This will delete all Windows registry entries mentioned by the Microsoft reference article above. Not recommended unless you're striving for default settings (possibly unsafe).\n\nAre you sure?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3))
             {
@@ -209,11 +210,11 @@ namespace BitSpectre
 
         void labelDecimalValue_DoubleClick(object sender, EventArgs e) => JumpToKey();
 
-        void tsmJump_Click(object sender, EventArgs e) => JumpToKey();
+        void miJump_Click(object sender, EventArgs e) => JumpToKey();
 
         void JumpToKey()
         {
-            if (checkBoxUnderstood.Checked)
+            if (cbUnderstood.Checked)
             {
                 showMsg("Please note: the registry editor may not reflect your changes until you perform a F5 refresh.");
 
