@@ -75,6 +75,7 @@ namespace BitSpectre
         {
             miJump.Enabled = false;
             miDelete.Enabled = false;
+            miVersion.Enabled = false;
             cbHyperV.ForeColor = Color.Gray;
             miVersion.Text = GetType().Namespace + " v" + GetType().Assembly.GetName().Version.ToString();
 
@@ -182,6 +183,7 @@ namespace BitSpectre
                 userSetHyperV = true;
             }
         }
+
         void miDelete_Click(object sender, EventArgs e)
         {
             if (DialogResult.Yes == MessageBox.Show("This will delete all Windows registry entries mentioned by the Microsoft reference article above. Not recommended unless you're striving for default settings (possibly unsafe).\n\nAre you sure?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button3))
@@ -316,13 +318,18 @@ namespace BitSpectre
         private void cms1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
         {
             clbox.Enabled = cbUnderstood.Checked;
-            cbUnderstood.Visible = true;
+            //cbUnderstood.Visible = true;
         }
 
         private void cms1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             clbox.Enabled = false;
-            cbUnderstood.Visible = false;
+            //cbUnderstood.Visible = false;
+        }
+
+        private void lbMenu_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            cms1.Show(Cursor.Position.X, Cursor.Position.Y);
         }
     }
 }

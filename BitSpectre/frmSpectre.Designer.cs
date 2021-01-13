@@ -64,6 +64,7 @@
             this.miTPM = new System.Windows.Forms.ToolStripMenuItem();
             this.miSep3 = new System.Windows.Forms.ToolStripSeparator();
             this.miVersion = new System.Windows.Forms.ToolStripMenuItem();
+            this.lbMenu = new System.Windows.Forms.LinkLabel();
             this.tphv = new BitSpectre.TPanel();
             this.cms1.SuspendLayout();
             this.SuspendLayout();
@@ -99,7 +100,7 @@
             this.clbox.Location = new System.Drawing.Point(4, 20);
             this.clbox.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.clbox.Name = "clbox";
-            this.clbox.Size = new System.Drawing.Size(932, 244);
+            this.clbox.Size = new System.Drawing.Size(932, 229);
             this.clbox.TabIndex = 4;
             this.clbox.SelectedIndexChanged += new System.EventHandler(this.clbox_SelectedIndexChanged);
             // 
@@ -107,7 +108,7 @@
             // 
             this.lbDecimal.AutoSize = true;
             this.lbDecimal.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lbDecimal.Location = new System.Drawing.Point(4, 268);
+            this.lbDecimal.Location = new System.Drawing.Point(4, 252);
             this.lbDecimal.Name = "lbDecimal";
             this.lbDecimal.Size = new System.Drawing.Size(81, 13);
             this.lbDecimal.TabIndex = 5;
@@ -153,7 +154,7 @@
             // 
             this.lbGitHub.AutoSize = true;
             this.lbGitHub.LinkColor = System.Drawing.Color.DarkTurquoise;
-            this.lbGitHub.Location = new System.Drawing.Point(820, 268);
+            this.lbGitHub.Location = new System.Drawing.Point(820, 252);
             this.lbGitHub.Name = "lbGitHub";
             this.lbGitHub.Size = new System.Drawing.Size(116, 13);
             this.lbGitHub.TabIndex = 0;
@@ -166,7 +167,7 @@
             this.cbHyperV.AutoSize = true;
             this.cbHyperV.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cbHyperV.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.cbHyperV.Location = new System.Drawing.Point(372, 268);
+            this.cbHyperV.Location = new System.Drawing.Point(368, 251);
             this.cbHyperV.Margin = new System.Windows.Forms.Padding(2);
             this.cbHyperV.Name = "cbHyperV";
             this.cbHyperV.Size = new System.Drawing.Size(212, 17);
@@ -237,7 +238,7 @@
             this.miTools.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.miTools.Name = "miTools";
             this.miTools.Size = new System.Drawing.Size(139, 22);
-            this.miTools.Text = "Tools";
+            this.miTools.Text = "&Tools";
             // 
             // miCertificates
             // 
@@ -398,12 +399,24 @@
             this.miVersion.Name = "miVersion";
             this.miVersion.Size = new System.Drawing.Size(139, 22);
             // 
+            // lbMenu
+            // 
+            this.lbMenu.AutoSize = true;
+            this.lbMenu.LinkColor = System.Drawing.Color.DarkTurquoise;
+            this.lbMenu.Location = new System.Drawing.Point(200, 252);
+            this.lbMenu.Name = "lbMenu";
+            this.lbMenu.Size = new System.Drawing.Size(86, 13);
+            this.lbMenu.TabIndex = 9;
+            this.lbMenu.TabStop = true;
+            this.lbMenu.Text = "Advanced Menu";
+            this.lbMenu.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbMenu_LinkClicked);
+            // 
             // tphv
             // 
-            this.tphv.Location = new System.Drawing.Point(336, 264);
+            this.tphv.Location = new System.Drawing.Point(332, 248);
             this.tphv.Margin = new System.Windows.Forms.Padding(2);
             this.tphv.Name = "tphv";
-            this.tphv.Size = new System.Drawing.Size(284, 24);
+            this.tphv.Size = new System.Drawing.Size(288, 24);
             this.tphv.TabIndex = 7;
             // 
             // frmSpectre
@@ -412,8 +425,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(941, 285);
-            this.ContextMenuStrip = this.cms1;
+            this.ClientSize = new System.Drawing.Size(941, 271);
+            this.Controls.Add(this.lbMenu);
             this.Controls.Add(this.tphv);
             this.Controls.Add(this.cbHyperV);
             this.Controls.Add(this.clbox);
@@ -474,5 +487,6 @@
         private System.Windows.Forms.ToolStripMenuItem miGetAppx;
         private System.Windows.Forms.ToolStripMenuItem miStdPackages;
         private System.Windows.Forms.ToolStripMenuItem miSchedTasks;
+        private System.Windows.Forms.LinkLabel lbMenu;
     }
 }
