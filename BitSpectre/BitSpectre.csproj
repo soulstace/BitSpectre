@@ -66,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CLBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CLBox.Designer.cs">
+      <DependentUpon>CLBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSpectre.cs">
       <SubType>Form</SubType>
     </Compile>

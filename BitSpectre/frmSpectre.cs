@@ -23,6 +23,13 @@ namespace BitSpectre
         public frmSpectre()
         {
             InitializeComponent();
+            miJump.Enabled = false;
+            miDelete.Enabled = false;
+            miVersion.Enabled = false;
+            cbHyperV.ForeColor = Color.Gray;
+            miVersion.Text = GetType().Namespace + " v" + GetType().Assembly.GetName().Version.ToString();
+            cms1.Renderer = new TSRenderer();
+            //clbox.DrawMode = DrawMode.OwnerDrawFixed;
         }
 
         protected override void WndProc(ref Message msg)
@@ -73,12 +80,6 @@ namespace BitSpectre
 
         private void frmSpectre_Load(object sender, EventArgs e)
         {
-            miJump.Enabled = false;
-            miDelete.Enabled = false;
-            miVersion.Enabled = false;
-            cbHyperV.ForeColor = Color.Gray;
-            miVersion.Text = GetType().Namespace + " v" + GetType().Assembly.GetName().Version.ToString();
-
             RegistryKey rkHv = Registry.LocalMachine.OpenSubKey(hypkey, RegistryKeyPermissionCheck.ReadSubTree);
             if (rkHv != null)
             {
@@ -121,7 +122,7 @@ namespace BitSpectre
 
                 bool flag = clbox.GetItemCheckState(clbox.SelectedIndex) == CheckState.Checked;
                 spectreVal = SetBinaryFlag(spectreVal, clbox.SelectedIndex - 1, flag); //the selected index is offset +1 from the first bit in the buffer
-                                                                                                 //because the index 0 checkbox isn't used as a bit flag
+                                                                                       //because the index 0 checkbox isn't used as a bit flag
             }
 
             if (spectreVal == 0)
@@ -209,7 +210,7 @@ namespace BitSpectre
             if (r != null) r.Close();
         }
 
-        void showMsg(string msg) => 
+        void showMsg(string msg) =>
             MessageBox.Show(msg, "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
 
         void lbDecimal_DoubleClick(object sender, EventArgs e) => JumpToKey();
@@ -330,6 +331,20 @@ namespace BitSpectre
         private void lbMenu_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             cms1.Show(Cursor.Position.X, Cursor.Position.Y);
+        }
+    }
+    public class TSRenderer : ToolStripProfessionalRenderer
+    {
+        protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
+        {
+            if (!e.Item.Selected)
+                base.OnRenderMenuItemBackground(e);
+            else
+            {
+                Rectangle r = new Rectangle(Point.Empty, e.Item.Size);
+                e.Graphics.FillRectangle(Brushes.DarkTurquoise, r);
+                e.Graphics.DrawRectangle(Pens.Black, 1, 0, r.Width - 2, r.Height - 1);
+            }
         }
     }
 }

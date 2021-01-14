@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.clbox = new System.Windows.Forms.CheckedListBox();
+            this.clbox = new CLBox();
             this.lbDecimal = new System.Windows.Forms.Label();
             this.lbHelp = new System.Windows.Forms.Label();
             this.lbMS = new System.Windows.Forms.LinkLabel();
@@ -190,7 +190,7 @@
             this.miSep3,
             this.miVersion});
             this.cms1.Name = "cm1";
-            this.cms1.Size = new System.Drawing.Size(140, 110);
+            this.cms1.Size = new System.Drawing.Size(181, 132);
             this.cms1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cms1_Closed);
             this.cms1.Opening += new System.ComponentModel.CancelEventHandler(this.cms1_Opening);
             // 
@@ -198,27 +198,27 @@
             // 
             this.miJump.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.miJump.Name = "miJump";
-            this.miJump.Size = new System.Drawing.Size(139, 22);
+            this.miJump.Size = new System.Drawing.Size(180, 22);
             this.miJump.Text = "&Jump to Key";
             this.miJump.Click += new System.EventHandler(this.miJump_Click);
             // 
             // miSep1
             // 
             this.miSep1.Name = "miSep1";
-            this.miSep1.Size = new System.Drawing.Size(136, 6);
+            this.miSep1.Size = new System.Drawing.Size(177, 6);
             // 
             // miDelete
             // 
             this.miDelete.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.miDelete.Name = "miDelete";
-            this.miDelete.Size = new System.Drawing.Size(139, 22);
+            this.miDelete.Size = new System.Drawing.Size(180, 22);
             this.miDelete.Text = "Delete All";
             this.miDelete.Click += new System.EventHandler(this.miDelete_Click);
             // 
             // miSep2
             // 
             this.miSep2.Name = "miSep2";
-            this.miSep2.Size = new System.Drawing.Size(136, 6);
+            this.miSep2.Size = new System.Drawing.Size(177, 6);
             // 
             // miTools
             // 
@@ -237,7 +237,7 @@
             this.miTPM});
             this.miTools.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.miTools.Name = "miTools";
-            this.miTools.Size = new System.Drawing.Size(139, 22);
+            this.miTools.Size = new System.Drawing.Size(180, 22);
             this.miTools.Text = "&Tools";
             // 
             // miCertificates
@@ -391,13 +391,13 @@
             // miSep3
             // 
             this.miSep3.Name = "miSep3";
-            this.miSep3.Size = new System.Drawing.Size(136, 6);
+            this.miSep3.Size = new System.Drawing.Size(177, 6);
             // 
             // miVersion
             // 
             this.miVersion.ForeColor = System.Drawing.Color.Gray;
             this.miVersion.Name = "miVersion";
-            this.miVersion.Size = new System.Drawing.Size(139, 22);
+            this.miVersion.Size = new System.Drawing.Size(180, 22);
             // 
             // lbMenu
             // 
@@ -451,7 +451,7 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckedListBox clbox;
+        private CLBox clbox;
         private System.Windows.Forms.Label lbDecimal;
         private System.Windows.Forms.Label lbHelp;
         private System.Windows.Forms.LinkLabel lbMS;
