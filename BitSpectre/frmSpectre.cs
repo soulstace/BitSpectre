@@ -333,6 +333,7 @@ namespace BitSpectre
             cms1.Show(Cursor.Position.X, Cursor.Position.Y);
         }
     }
+
     public class TSRenderer : ToolStripProfessionalRenderer
     {
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)

@@ -12,13 +12,10 @@ namespace BitSpectre
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            Color foreColor;
-            Color backColor = this.BackColor;
+            Color foreColor = e.ForeColor;
             DrawItemState s2 = e.State;
             if (e.Index >= 0)
                 foreColor = GetItemChecked(e.Index) ? Color.DarkTurquoise : Color.WhiteSmoke;
-            else
-                foreColor = e.ForeColor;
 
             if ((s2 & DrawItemState.Focus) == DrawItemState.Focus)
                 s2 &= ~DrawItemState.NoFocusRect;
@@ -26,7 +23,7 @@ namespace BitSpectre
             if ((s2 & DrawItemState.Selected) == DrawItemState.Selected)
                 s2 &= ~DrawItemState.Selected;
 
-            DrawItemEventArgs e2 = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, s2, foreColor, backColor);
+            DrawItemEventArgs e2 = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, s2, foreColor, this.BackColor);
             base.OnDrawItem(e2);
         }
     }
